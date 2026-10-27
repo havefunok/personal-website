@@ -1,0 +1,11 @@
+---
+import {render} from 'astro:content';
+import {publishedWriting} from '../../lib/content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import Media from '../../components/ui/Media.astro';
+import Video from '../../components/ui/Video.astro';
+import Embed from '../../components/ui/Embed.astro';
+export async function getStaticPaths(){return (await publishedWriting()).map(article=>({params:{id:article.id},props:{article}}));}
+const {article}=Astro.props;const {Content,headings}=await render(article);
+---
+<ArticleLayout article={article} headings={headings}><Content components={{Media,Video,Embed}}/></ArticleLayout>

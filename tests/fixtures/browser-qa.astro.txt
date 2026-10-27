@@ -1,0 +1,40 @@
+---
+const paths=['/','/about/','/projects/','/projects/competition-robot-systems/','/projects/fremont-robotics-academy/','/projects/emergency-supplies/','/writing/','/resume/','/contact/','/writing/qa-browser-article/'];
+const requested=Astro.url.searchParams.get('page')??'/';
+const page=paths.includes(requested)?requested:'/';
+---
+<html lang="en"><head><title>Temporary responsive QA</title></head><body style="margin:0;background:#ddd;color:#111;font-family:system-ui"><h1 style="font-size:16px;padding:8px">Responsive QA: {page}</h1><nav>{paths.map(path=><a style="margin:8px" href={`?page=${encodeURIComponent(path)}`}>{path}</a>)}</nav><p><button id="audit">Audit all pages in both themes</button><span id="status"> Ready</span></p><pre id="results" style="white-space:pre-wrap;font-size:12px"></pre><div style="display:grid;gap:20px;margin-top:20px">{[375,768,1440].map(width=><div><p>{width}px</p><iframe id={`frame-${width}`} title={`${width}px viewport`} src={page} width={width} height="900" style="border:0;display:block"></iframe></div>)}</div></body></html>
+<script>
+ import axe from 'axe-core';
+ const requestedPath=new URLSearchParams(location.search).get('page');
+ if(requestedPath&&[...document.querySelectorAll('nav a')].some(a=>a.textContent===requestedPath)){document.querySelectorAll<HTMLIFrameElement>('iframe').forEach(f=>f.src=requestedPath);document.querySelector('h1')!.textContent='Responsive QA: '+requestedPath;}
+ const button=document.querySelector<HTMLButtonElement>('#audit')!;
+ const output=document.querySelector('#results')!;
+ const status=document.querySelector('#status')!;
+ button.addEventListener('click',async()=>{
+  button.disabled=true;
+  const results:unknown[]=[];
+  const paths=requestedPath?[requestedPath]:[...document.querySelectorAll<HTMLAnchorElement>('nav a')].map(a=>a.textContent!);
+  try{
+   for(const path of paths){
+    const frames=[...document.querySelectorAll<HTMLIFrameElement>('iframe')];
+    await Promise.all(frames.map(frame=>new Promise<void>(resolve=>{frame.onload=()=>resolve();frame.src=path;})));
+    for(const frame of frames){
+     const doc=frame.contentDocument!;await doc.fonts.ready;
+     const script=doc.createElement('script');script.textContent=axe.source;doc.head.append(script);
+     for(const theme of ['light','dark']){
+      doc.documentElement.dataset.theme=theme;
+      await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+      status.textContent=` ${path} / ${frame.width}px / ${theme}`;
+      const audit=await (frame.contentWindow as Window & {axe:typeof axe}).axe.run(doc,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa','best-practice']}});
+      const width=doc.documentElement.clientWidth,scroll=doc.documentElement.scrollWidth;
+      results.push({path,width:Number(frame.width),theme,overflow:scroll>width,violations:audit.violations.map(v=>({id:v.id,impact:v.impact,targets:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))})),incomplete:audit.incomplete.map(v=>({id:v.id,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))}))});
+      output.textContent=JSON.stringify(results,null,2);
+     }
+    }
+   }
+   status.textContent=' Complete';
+  }catch(error){status.textContent=` Failed: ${error}`;}
+  button.disabled=false;
+ });
+</script>

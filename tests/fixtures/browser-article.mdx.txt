@@ -1,0 +1,37 @@
+---
+title: "Temporary article for browser verification"
+description: "A disposable test of technical typography, never included in the final site."
+date: 2026-10-25
+kind: technical
+tags: [Testing]
+draft: false
+---
+## An equation
+
+A short explanation followed by a rendered relationship.
+
+$$V = IR$$
+
+## A code example
+
+```cpp
+constexpr float referenceVoltage = 3.3f;
+float readVoltage(unsigned sample) {
+    return referenceVoltage * sample / 4095.0f;
+}
+```
+
+## A technical table
+
+| Signal | Unit | Purpose |
+| --- | --- | --- |
+| Voltage | V | Electrical potential |
+| Current | A | Flow of charge |
+
+## An internal link
+
+Continue to the [project directory](/projects/) or return to [About](/about/).
+
+## Longer text
+
+This temporary page checks the comfortable reading measure, navigation, headings, equation rendering, syntax highlighting, table layout, and table of contents. It is removed before deployment and is not presented as an article written by the owner.

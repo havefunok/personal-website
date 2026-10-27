@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectTile from '../../components/projects/ProjectTile.astro';
+import ContactBand from '../../components/layout/ContactBand.astro';
+import {publishedProjects} from '../../lib/content';
+import {site} from '../../config/site';
+const projects=await publishedProjects();
+const categories=[...new Set([...site.projectCategories,...projects.map(p=>p.data.category)])];
+const tags=[...new Set(projects.flatMap(p=>p.data.tags))].sort();
+---
+<BaseLayout title="Projects" description="My work in robotics, hardware, and community projects, including the ideas, constraints, and experiences that have shaped how I approach engineering.">
+ <header class="page-header"><p class="eyebrow">The project index</p><h1>Projects and the ideas<br/>behind them.</h1><p class="lede">The projects below reflect my interests in robotics, hardware, and community work. Each one has given me a different way to consider how an idea can be applied, what limits that application, and how the work affects other people.</p></header>
+ <div class="filter-bar" id="project-filters" hidden><div class="filter-controls"><div class="filter-field"><label for="project-search">Find a project</label><input type="search" id="project-search" placeholder="Search work, skills, or ideas"/></div><div class="filter-field"><label for="category-filter">Category</label><select id="category-filter"><option value="">All categories</option>{categories.map(c=><option value={c}>{c}</option>)}</select></div><div class="filter-field"><label for="tag-filter">Tag</label><select id="tag-filter"><option value="">All tags</option>{tags.map(t=><option value={t}>{t}</option>)}</select></div></div><p id="project-count" class="filter-count" role="status" aria-live="polite" aria-atomic="true">{projects.length} projects</p></div>
+ <section class="project-grid" aria-label="Projects">{projects.map((project,index)=><ProjectTile project={project} index={index} filterable level={2}/>)}<p id="no-results" class="muted py-12" hidden>No projects match those filters. Try another category, tag, or search.</p>{!projects.length&&<p class="py-12 muted">I am preparing the projects I would like to share here.</p>}</section><div class="mb-16"></div><ContactBand/>
+</BaseLayout>
+<script>
+ const filters=document.getElementById('project-filters');
+ const search=document.querySelector<HTMLInputElement>('#project-search');
+ const category=document.querySelector<HTMLSelectElement>('#category-filter');
+ const tag=document.querySelector<HTMLSelectElement>('#tag-filter');
+ const rows=[...document.querySelectorAll<HTMLAnchorElement>('[data-project]')];
+ const count=document.getElementById('project-count');const empty=document.getElementById('no-results');
+ if(filters&&search&&category&&tag&&count&&empty){
+  filters.hidden=false;
+  const readQuery=()=>{const q=new URLSearchParams(location.search);search.value=q.get('q')??'';category.value=q.get('category')??'';tag.value=q.get('tag')??'';};
+  const filter=(updateUrl=true)=>{
+   let visible=0;const term=search.value.trim().toLowerCase();
+   rows.forEach(row=>{const tags=JSON.parse(row.dataset.tags??'[]') as string[];const match=(!term||row.dataset.search?.includes(term))&&(!category.value||row.dataset.category===category.value)&&(!tag.value||tags.includes(tag.value));row.hidden=!match;if(match)visible++;});
+   count.textContent=`${visible} ${visible===1?'project':'projects'}`;empty.hidden=visible!==0;
+   if(updateUrl){const u=new URL(location.href);for(const [key,value]of [['q',search.value],['category',category.value],['tag',tag.value]]){if(key){if(value)u.searchParams.set(key,value);else u.searchParams.delete(key);}}history.replaceState(null,'',u);}
+  };
+  readQuery();filter(false);search.addEventListener('input',()=>filter());category.addEventListener('change',()=>filter());tag.addEventListener('change',()=>filter());window.addEventListener('popstate',()=>{readQuery();filter(false);});
+ }
+</script>

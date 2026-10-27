@@ -1,0 +1,13 @@
+---
+import type {CollectionEntry} from 'astro:content';
+import {displayDate,readingTime} from '../../lib/content';
+import {url} from '../../lib/urls';
+import Arrow from '../ui/Arrow.astro';
+interface Props {article:CollectionEntry<'writing'>;level?:2|3;}
+const {article,level=3}=Astro.props;
+const Heading=level===2?'h2':'h3';
+---
+<a class="writing-row" href={url(`/writing/${article.id}/`)}>
+ <span class="meta muted">{displayDate(article.data.date)}</span>
+ <div><Heading>{article.data.title}</Heading><p>{article.data.description}</p><p class="meta writing-row-meta">{readingTime(article.body)} min read{article.data.tags.length>0&&` / ${article.data.tags.join(' · ')}`}</p></div><Arrow/>
+</a>

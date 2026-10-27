@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Link from '../components/ui/Link.astro';
+import {site} from '../config/site';
+import {getCollection,getEntry,render} from 'astro:content';
+import {existsSync} from 'node:fs';
+import {url} from '../lib/urls';
+import {displayDate} from '../lib/content';
+const experiences=(await getCollection('experience',({data})=>!data.draft)).sort((a,b)=>a.data.order-b.data.order);
+const resume=await getEntry('pages','resume');
+if(!resume)throw new Error('Resume summary is missing.');
+const {Content}=await render(resume);
+const hasResume=Boolean(site.resumePath&&existsSync(`public${site.resumePath}`));
+---
+<BaseLayout title="Resume" description={resume.data.description}>
+ <header class="page-header"><p class="eyebrow">Background & experience</p><h1>{resume.data.title}</h1><p class="lede">{resume.data.description}</p><div class="actions">{hasResume?<><Link href={site.resumePath} primary>Open resume PDF</Link><a class="link-arrow" href={url(site.resumePath)} download>Download PDF ↓</a></>:site.email&&<Link href={`mailto:${site.email}?subject=Resume%20request`}>Request my resume</Link>}</div></header>
+ <div class="page-grid"><aside class="page-aside"><p class="mono muted">{site.location}</p></aside><div class="reading"><div class="prose"><Content/></div><section class="resume-block"><h2>Experience & leadership</h2>{experiences.map(({data:d})=><article class="resume-experience"><h3>{d.position} · {d.organization}</h3>{(d.startDate||d.current||d.location)&&<p class="meta">{displayDate(d.startDate)}{d.current?' — Present':d.endDate?` — ${displayDate(d.endDate)}`:''}{d.location&&` · ${d.location}`}</p>}<p>{d.description}</p>{d.achievements.length>0&&<ul>{d.achievements.map(achievement=><li>{achievement}</li>)}</ul>}</article>)}</section><Link href="/about/">More about my background</Link></div></div>
+</BaseLayout>

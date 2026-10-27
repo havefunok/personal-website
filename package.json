@@ -1,0 +1,47 @@
+{
+  "name": "oorjith-editorial-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "node scripts/social-card.mjs && astro build",
+    "preview": "astro preview --host 0.0.0.0",
+    "check": "astro check && node scripts/check-content.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "verify": "npm run check && npm test && npm run build && node scripts/check-output.mjs",
+    "test:content": "node scripts/test-content-workflow.mjs",
+    "qa:prepare": "node scripts/browser-qa.mjs",
+    "qa:clean": "node scripts/browser-qa.mjs --clean"
+  },
+  "dependencies": {
+    "astro": "7.4.2",
+    "@astrojs/mdx": "8.1.1",
+    "@astrojs/markdown-remark": "^7.3.0",
+    "@astrojs/sitemap": "3.7.4",
+    "@tailwindcss/vite": "4.3.3",
+    "tailwindcss": "4.3.3",
+    "@fontsource-variable/newsreader": "^5.2.0",
+    "@fontsource-variable/dm-sans": "^5.2.0",
+    "@fontsource/ibm-plex-mono": "^5.2.0",
+    "katex": "0.19.1",
+    "remark-math": "^6.0.0",
+    "rehype-katex": "^7.0.1",
+    "unist-util-visit": "^5.0.0",
+    "sharp": "0.35.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "typescript": "^5.9.0",
+    "@types/node": "^24.0.0",
+    "yaml": "^2.8.0",
+    "cheerio": "^1.1.0",
+    "axe-core": "4.14.0"
+  },
+  "overrides": {
+    "katex": "$katex"
+  }
+}

@@ -1,0 +1,12 @@
+---
+import {render} from 'astro:content';
+import {publishedProjects,relatedProjects} from '../../lib/content';
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
+import Media from '../../components/ui/Media.astro';
+import Video from '../../components/ui/Video.astro';
+import Embed from '../../components/ui/Embed.astro';
+export async function getStaticPaths(){const projects=await publishedProjects();return projects.map(project=>({params:{id:project.id},props:{project,related:relatedProjects(project,projects)}}));}
+const {project,related}=Astro.props;
+const {Content}=await render(project);
+---
+<ProjectLayout project={project} related={related}><Content components={{Media,Video,Embed}}/></ProjectLayout>

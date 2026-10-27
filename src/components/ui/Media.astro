@@ -1,0 +1,10 @@
+---
+import {url} from '../../lib/urls';
+import {mediaInfo} from '../../../scripts/media.mjs';
+interface Props {src:string;alt:string;width?:number;height?:number;eager?:boolean;caption?:string;}
+const {src,alt,width,height,eager=false,caption}=Astro.props;
+const optimized=mediaInfo(src);
+const sources=optimized?.sources as {src:string;width:number}[]|undefined;
+const source=sources?.at(-1)?.src??src;
+---
+<figure><img src={url(source)} srcset={sources?.map(s=>`${url(s.src)} ${s.width}w`).join(', ')} sizes={sources?'(max-width: 767px) calc(100vw - 48px), (max-width: 1200px) 85vw, 1100px':undefined} alt={alt} width={optimized?.width??width} height={optimized?.height??height} loading={eager?'eager':'lazy'} decoding="async" fetchpriority={eager?'high':undefined}/>{caption&&<figcaption>{caption}</figcaption>}</figure>

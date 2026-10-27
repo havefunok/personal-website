@@ -1,0 +1,7 @@
+---
+interface Props {src:string;title:string;}
+const {src,title}=Astro.props;
+const parsed=new URL(src);
+if(!['https://www.youtube-nocookie.com','https://player.vimeo.com'].includes(parsed.origin))throw new Error('Use a YouTube privacy-enhanced or Vimeo embed URL.');
+---
+<iframe class="video-embed" src={src} title={title} loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>

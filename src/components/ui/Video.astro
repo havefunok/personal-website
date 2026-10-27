@@ -1,0 +1,6 @@
+---
+import {url} from '../../lib/urls';
+interface Props {src:string;title:string;poster?:string;captions?:string;}
+const {src,title,poster,captions}=Astro.props;
+---
+<figure><video controls preload="metadata" aria-label={title} poster={poster?url(poster):undefined}><source src={url(src)}/>{captions&&<track default kind="captions" src={url(captions)} srclang="en" label="English"/>}<p><a href={url(src)}>Download {title}</a></p></video><figcaption>{title}</figcaption><slot/></figure>

@@ -1,0 +1,7 @@
+---
+import Arrow from './Arrow.astro';
+import { url } from '../../lib/urls';
+interface Props { href:string; primary?:boolean; }
+const {href,primary=false}=Astro.props;
+---
+<a href={url(href)} class:list={['link-arrow',{primary}]}><slot/><Arrow/></a>
