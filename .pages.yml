@@ -1,0 +1,430 @@
+# Pages CMS: Markdown visual editing; MDX remains code-only.
+media:
+- name: images
+  label: Images
+  input: public/images
+  output: /images
+  extensions:
+  - jpg
+  - jpeg
+  - png
+  - webp
+  - avif
+  - svg
+  rename: safe
+- name: documents
+  label: PDF documents
+  input: public/documents
+  output: /documents
+  extensions:
+  - pdf
+  rename: safe
+content:
+- name: site
+  label: Site settings & homepage
+  type: file
+  path: src/config/site.json
+  format: json
+  fields:
+  - name: name
+    label: Name
+    type: string
+  - name: shortName
+    label: Short name
+    type: string
+  - name: initials
+    label: Initials
+    type: string
+  - name: headline
+    label: Headline
+    type: string
+  - name: description
+    label: Description
+    type: text
+  - name: email
+    label: Email
+    type: string
+  - name: github
+    label: Github
+    type: string
+  - name: linkedin
+    label: Linkedin
+    type: string
+  - name: socials
+    label: Socials
+    type: object
+    list: true
+    fields:
+    - name: label
+      label: Label
+      type: string
+    - name: url
+      label: Url
+      type: string
+  - name: location
+    label: Location
+    type: string
+  - name: education
+    label: Education
+    type: string
+  - name: resumePath
+    label: Resume path
+    type: file
+    options:
+      media: documents
+  - name: portrait
+    label: Portrait
+    type: image
+    options:
+      media: images
+  - name: portraitAlt
+    label: Portrait alt
+    type: string
+  - name: siteUrl
+    label: Site url
+    type: string
+  - name: basePath
+    label: Base path
+    type: string
+  - name: seoImage
+    label: Seo image
+    type: image
+    options:
+      media: images
+  - name: navigation
+    label: Navigation
+    type: object
+    list: true
+    fields:
+    - name: label
+      label: Label
+      type: string
+    - name: path
+      label: Path
+      type: string
+  - name: projectCategories
+    label: Project categories
+    type: string
+    list: true
+  - name: hero
+    label: Hero
+    type: object
+    fields:
+    - name: greeting
+      label: Greeting
+      type: string
+    - name: intro
+      label: Introduction
+      type: text
+  - name: introduction
+    label: Introduction
+    type: text
+  - name: beyond
+    label: Beyond
+    type: object
+    fields:
+    - name: title
+      label: Title
+      type: string
+    - name: intro
+      label: Intro
+      type: text
+    - name: items
+      label: Items
+      type: object
+      list: true
+      fields:
+      - name: title
+        label: Title
+        type: string
+      - name: text
+        label: Text
+        type: text
+      - name: link
+        label: Link
+        type: string
+      - name: linkLabel
+        label: Link label
+        type: string
+  - name: currentFocus
+    label: Current focus
+    type: object
+    fields:
+    - name: label
+      label: Label
+      type: string
+    - name: items
+      label: Items
+      type: object
+      list: true
+      fields:
+      - name: title
+        label: Title
+        type: string
+      - name: text
+        label: Text
+        type: string
+  - name: personalWriting
+    label: Personal writing introduction
+    type: object
+    fields:
+    - name: title
+      label: Title
+      type: string
+    - name: intro
+      label: Introduction
+      type: text
+    - name: topics
+      label: Topics
+      type: string
+      list: true
+  - name: contact
+    label: Contact
+    type: object
+    fields:
+    - name: heading
+      label: Heading
+      type: string
+    - name: intro
+      label: Intro
+      type: text
+  - name: featuredLimit
+    label: Featured limit
+    type: number
+- name: about
+  label: About page
+  type: file
+  path: src/content/pages/about.md
+  format: yaml-frontmatter
+  fields: &id001
+  - name: title
+    label: Title
+    type: string
+    required: true
+  - name: description
+    label: Description
+    type: text
+    required: true
+  - &id002
+    name: body
+    label: Body
+    type: rich-text
+    options:
+      format: markdown
+      media: images
+      switcher: true
+- name: resume
+  label: Resume summary
+  type: file
+  path: src/content/pages/resume.md
+  format: yaml-frontmatter
+  fields: *id001
+- name: projects
+  label: Projects
+  type: collection
+  path: src/content/projects
+  format: yaml-frontmatter
+  filename:
+    template: '{primary}.md'
+    field: create
+  exclude:
+  - '**/*.mdx'
+  view:
+    primary: title
+  fields:
+  - name: title
+    label: Title
+    type: string
+    required: true
+  - name: description
+    label: Description
+    type: text
+    required: true
+  - name: subtitle
+    label: Subtitle
+    type: text
+  - name: category
+    label: Category
+    type: string
+    required: true
+    description: Use a category from Site settings, or enter a new category. New categories
+      appear automatically.
+  - name: date
+    label: Date
+    type: date
+  - name: endDate
+    label: End date
+    type: date
+  - name: updated
+    label: Updated
+    type: date
+  - name: timeframe
+    label: Timeframe
+    type: string
+  - name: tags
+    label: Tags
+    type: string
+    list: true
+  - name: technologies
+    label: Technologies
+    type: string
+    list: true
+  - name: role
+    label: Role
+    type: string
+  - name: collaborators
+    label: Collaborators
+    type: string
+    list: true
+  - name: featured
+    label: Featured
+    type: boolean
+    default: false
+  - name: featuredOrder
+    label: Featured order
+    type: number
+  - name: status
+    label: Status
+    type: select
+    options:
+      values:
+      - planned
+      - ongoing
+      - completed
+      - archived
+  - &id003
+    name: coverImage
+    label: Cover image
+    type: image
+    options:
+      media: images
+  - &id004
+    name: coverAlt
+    label: Cover alt
+    type: string
+  - name: github
+    label: Github
+    type: string
+  - name: demo
+    label: Demo
+    type: string
+  - name: links
+    label: Links
+    type: object
+    list: true
+    fields:
+    - name: label
+      label: Label
+      type: string
+    - name: url
+      label: Url
+      type: string
+  - name: draft
+    label: Draft
+    type: boolean
+    default: true
+  - *id002
+- name: writing
+  label: Writing
+  type: collection
+  path: src/content/writing
+  format: yaml-frontmatter
+  filename:
+    template: '{primary}.md'
+    field: create
+  exclude:
+  - '**/*.mdx'
+  view:
+    primary: title
+  fields:
+  - name: title
+    label: Title
+    type: string
+    required: true
+  - name: description
+    label: Description
+    type: text
+    required: true
+  - name: kind
+    label: Writing section
+    type: select
+    default: personal
+    options:
+      values:
+      - personal
+      - technical
+    description: Personal essays and reading reflections, or technical engineering notes.
+      Personal entries are also selected automatically on the homepage.
+  - name: date
+    label: Date
+    type: date
+    required: true
+  - name: updated
+    label: Updated
+    type: date
+  - name: tags
+    label: Tags
+    type: string
+    list: true
+  - *id003
+  - *id004
+  - name: draft
+    label: Draft
+    type: boolean
+    default: true
+  - *id002
+- name: experience
+  label: Experience
+  type: collection
+  path: src/content/experience
+  format: yaml-frontmatter
+  filename:
+    template: '{primary}.md'
+    field: create
+  exclude:
+  - '**/*.mdx'
+  view:
+    primary: organization
+  fields:
+  - name: organization
+    label: Organization
+    type: string
+    required: true
+  - name: position
+    label: Position
+    type: string
+    required: true
+  - name: startDate
+    label: Start date
+    type: date
+  - name: endDate
+    label: End date
+    type: date
+  - name: current
+    label: Current
+    type: boolean
+  - name: location
+    label: Location
+    type: string
+  - name: description
+    label: Description
+    type: text
+    required: true
+  - name: achievements
+    label: Achievements
+    type: string
+    list: true
+  - name: technologies
+    label: Technologies
+    type: string
+    list: true
+  - name: organizationLink
+    label: Organization link
+    type: string
+  - name: order
+    label: Order
+    type: number
+  - name: draft
+    label: Draft
+    type: boolean
+    default: false
