@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {site} from '../config/site';
+import {publishedProjects,publishedWriting} from '../lib/content';
+import ProjectTile from '../components/projects/ProjectTile.astro';
+import WritingRow from '../components/writing/WritingRow.astro';
+import Link from '../components/ui/Link.astro';
+import {url} from '../lib/urls';
+const projects=(await publishedProjects()).filter(p=>p.data.featured).slice(0,site.featuredLimit);
+const personalWriting=(await publishedWriting()).filter(a=>a.data.kind==='personal').slice(0,2);
+---
+<BaseLayout title={site.name}>
+ <section class="hero">
+  <h1>{site.hero.greeting}</h1><p class="hero-intro">{site.hero.intro}</p>
+  <div class="hero-links"><a href={url('/resume/')}>Resume</a>{site.email?<a href={`mailto:${site.email}`}>{site.email}</a>:<a href={url('/contact/')}>Get in touch</a>}</div>
+ </section>
+ <section class="selected-work" id="selected-work">
+  <div class="section-head"><h2 class="section-label">Selected<br/>projects <span aria-hidden="true">↘</span></h2><a class="quiet-link" href={url('/projects/')}>All projects <span aria-hidden="true">↗</span></a></div>
+  <div class="project-grid">{projects.map((project,index)=><ProjectTile project={project} index={index}/> )}</div>
+  {!projects.length&&<p class="muted">I am preparing the projects I would like to share here.</p>}
+ </section>
+ <section class="personal-writing home-writing" id="personal-writing">
+  <div class="section-head"><h2 class="section-label">Personal<br/>writing <span aria-hidden="true">↘</span></h2><a class="quiet-link" href={url('/writing/')}>All writing <span aria-hidden="true">↗</span></a></div>
+  <div class="writing-intro"><p>{site.personalWriting.intro}</p><div><p class="writing-topics">{site.personalWriting.topics.join(' / ')}</p><Link href="/writing/#personal-writing">Explore personal writing</Link></div></div>
+  {personalWriting.length>0?<div>{personalWriting.map(article=><WritingRow article={article}/>)}</div>:<p class="publication-note">No personal essays published here yet.</p>}
+ </section>
+ <section class="home-about"><p class="statement">{site.introduction}</p><div class="home-about-detail"><div><h2 class="section-label">Beyond engineering <span aria-hidden="true">↘</span><span class="sr-only"> — {site.beyond.title}</span></h2><p>{site.beyond.intro}</p></div><div>{site.beyond.items.map(item=><article class="beyond-item"><h3>{item.title}</h3><p>{item.text}</p><a href={url(item.link)}>{item.linkLabel} <span aria-hidden="true">↗</span></a></article>)}</div></div><Link href="/about/">More about me</Link></section>
+ <section class="focus-section"><h2 class="section-label">{site.currentFocus.label} <span aria-hidden="true">↘</span></h2><div class="focus-grid">{site.currentFocus.items.map(item=><article><h3>{item.title}</h3><p>{item.text}</p></article>)}</div></section>
+</BaseLayout>

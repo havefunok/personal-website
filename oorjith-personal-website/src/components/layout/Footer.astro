@@ -1,0 +1,8 @@
+---
+import {site,socialLinks} from '../../config/site';
+import {url} from '../../lib/urls';
+---
+<footer class="site-footer container">
+ <div class="footer-grid"><div><h2 class="section-label">Explore <span aria-hidden="true">↘</span></h2><nav aria-label="Footer navigation">{site.navigation.filter(item=>item.path!=='/').map(item=><a href={url(item.path)}>{item.label}</a>)}</nav></div><div><h2 class="section-label">Elsewhere <span aria-hidden="true">↘</span></h2><div class="footer-links">{socialLinks.map(link=><a href={link.url}>{link.label}</a>)}{site.email&&<a href={`mailto:${site.email}`}>Email</a>}</div></div><div class="footer-note"><p>{site.education}</p><p>{site.location}</p><a href={url('/writing/#personal-writing')}>Personal writing <span aria-hidden="true">↗</span></a></div></div>
+ <p class="copyright">© {new Date().getFullYear()} {site.name}</p>
+</footer>

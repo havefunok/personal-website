@@ -1,0 +1,17 @@
+---
+import type {CollectionEntry} from 'astro:content';
+import Media from '../ui/Media.astro';
+import Arrow from '../ui/Arrow.astro';
+import {url} from '../../lib/urls';
+import {displayDate} from '../../lib/content';
+interface Props {project:CollectionEntry<'projects'>;index:number;filterable?:boolean;level?:2|3;}
+const {project,index,filterable=false,level=3}=Astro.props;
+const d=project.data;const Heading=level===2?'h2':'h3';
+const timeframe=d.timeframe??displayDate(d.date);
+---
+<a class="project-tile" href={url(`/projects/${project.id}/`)} data-tone={index%3} data-project={filterable?'':undefined} data-category={d.category} data-tags={JSON.stringify(d.tags)} data-search={`${d.title} ${d.description} ${d.tags.join(' ')}`.toLowerCase()}>
+ <div class="tile-label"><Heading>{d.title} <span aria-hidden="true">·</span></Heading><span>{d.role??d.category}</span></div>
+ {d.coverImage?<div class="tile-image"><Media src={d.coverImage} alt={d.coverAlt??''}/><span class="tile-open" aria-hidden="true"><Arrow/></span></div>:<div class="type-cover" aria-hidden="true"><div class="cover-top"><span>{d.category}</span><span>{String(index+1).padStart(2,'0')}</span></div><div class="cover-title">{d.title}</div><div class="cover-bottom"><span>{d.technologies.slice(0,3).join(' / ')||d.tags.slice(0,3).join(' / ')||d.category}</span><Arrow/></div></div>}
+ <p class="tile-description">{d.description}</p>
+ {(timeframe||d.status)&&<p class="tile-meta">{timeframe}{timeframe&&d.status?' · ':''}{d.status}</p>}
+</a>

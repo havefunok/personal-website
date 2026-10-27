@@ -1,0 +1,15 @@
+---
+import type {CollectionEntry} from 'astro:content';
+import Arrow from '../ui/Arrow.astro';
+import Media from '../ui/Media.astro';
+import {url} from '../../lib/urls';
+import {displayDate} from '../../lib/content';
+interface Props {project:CollectionEntry<'projects'>;index:number;showCover?:boolean;filterable?:boolean;level?:2|3;}
+const {project,index,showCover=false,filterable=false,level=3}=Astro.props;const d=project.data;
+const Heading = level===2 ? 'h2' : 'h3';
+---
+<a class="project-row" href={url(`/projects/${project.id}/`)} data-project={filterable?'':undefined} data-category={d.category} data-tags={JSON.stringify(d.tags)} data-search={`${d.title} ${d.description} ${d.tags.join(' ')}`.toLowerCase()}>
+ <span class="project-number mono" aria-hidden="true">{String(index+1).padStart(2,'0')}</span>
+ <div><div class="meta">{d.category}{d.role&&` / ${d.role}`}</div><Heading class="project-title">{d.title}</Heading><p>{d.description}</p>{showCover&&d.coverImage&&<div class="project-cover"><Media src={d.coverImage} alt={d.coverAlt??''}/></div>}</div>
+ <div class="project-side"><div class="meta">{d.timeframe??displayDate(d.date)}</div>{d.status&&<span class="status">{d.status}</span>}</div><span class="row-arrow"><Arrow/></span>
+</a>

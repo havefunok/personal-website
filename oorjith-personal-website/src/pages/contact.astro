@@ -1,0 +1,9 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Arrow from '../components/ui/Arrow.astro';
+import {site,socialLinks} from '../config/site';
+---
+<BaseLayout title="Contact" description={site.contact.intro}>
+ <header class="page-header"><p class="eyebrow">Contact</p><h1>{site.contact.heading}</h1><p class="lede">{site.contact.intro}</p></header>
+ <div class="contact-page"><div class="contact-links">{site.email&&<a class="contact-link" href={`mailto:${site.email}`}><span><span class="meta">Email</span>{site.email}</span><Arrow/></a>}{socialLinks.map(link=><a class="contact-link" href={link.url}><span><span class="meta">Elsewhere</span>{link.label}</span><Arrow/></a>)}</div><aside class="contact-note"><h2>My areas of interest</h2><p>My main interests are robotics, embedded systems, control, and hardware design. I am particularly interested in work that requires understanding how decisions in one area affect the others.</p><p class="mono mb-0">{site.location}</p></aside></div>
+</BaseLayout>

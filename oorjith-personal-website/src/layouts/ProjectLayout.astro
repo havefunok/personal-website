@@ -1,0 +1,25 @@
+---
+import type {CollectionEntry} from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import Link from '../components/ui/Link.astro';
+import Media from '../components/ui/Media.astro';
+import ProjectRow from '../components/projects/ProjectRow.astro';
+import {url} from '../lib/urls';
+import {displayDate} from '../lib/content';
+interface Props {project:CollectionEntry<'projects'>;related:CollectionEntry<'projects'>[];}
+const {project,related}=Astro.props;const d=project.data;
+const links=[...(d.github?[{label:'Source code',url:d.github}]:[]),...(d.demo?[{label:'View project',url:d.demo}]:[]),...d.links];
+---
+<BaseLayout title={d.title} description={d.description} image={d.coverImage}>
+ <header class="page-header project-header"><Link href="/projects/">Back to projects</Link><p class="eyebrow mt-8">{d.category}{d.status&&` / ${d.status}`}</p><h1>{d.title}</h1><p class="lede">{d.subtitle??d.description}</p></header>
+ {d.coverImage&&<div class="detail-cover"><Media src={d.coverImage} alt={d.coverAlt??''} eager/></div>}
+ <div class="page-grid"><aside class="page-aside"><dl>
+ {d.role&&<div><dt>My role</dt><dd>{d.role}</dd></div>}
+ {(d.timeframe||d.date)&&<div><dt>Timeframe</dt><dd>{d.timeframe??`${displayDate(d.date)}${d.endDate?` — ${displayDate(d.endDate)}`:''}`}</dd></div>}
+ {d.collaborators.length>0&&<div><dt>Collaborators</dt><dd>{d.collaborators.join(', ')}</dd></div>}
+ {d.technologies.length>0&&<div><dt>Tools & technologies</dt><dd>{d.technologies.join(' · ')}</dd></div>}
+ {d.tags.length>0&&<div><dt>Explore by tag</dt><dd><ul class="tag-list">{d.tags.map(t=><li><a class="tag tag-link" href={`${url('/projects/')}?tag=${encodeURIComponent(t)}`}>{t}</a></li>)}</ul></dd></div>}
+ {d.updated&&<div><dt>Updated</dt><dd>{displayDate(d.updated)}</dd></div>}
+ </dl>{links.map(link=><Link href={link.url}>{link.label}</Link>)}</aside><article class="prose"><slot/></article></div>
+ {related.length>0&&<section class="related"><div class="section-head"><div><p class="eyebrow">Related work</p><h2>Other projects I have worked on.</h2></div></div>{related.map((p,i)=><ProjectRow project={p} index={i}/>)}</section>}
+</BaseLayout>

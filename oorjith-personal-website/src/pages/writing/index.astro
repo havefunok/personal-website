@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Link from '../../components/ui/Link.astro';
+import WritingRow from '../../components/writing/WritingRow.astro';
+import {site} from '../../config/site';
+import {publishedWriting} from '../../lib/content';
+const articles=await publishedWriting();
+const personal=articles.filter(a=>a.data.kind==='personal');
+const technical=articles.filter(a=>a.data.kind==='technical');
+---
+<BaseLayout title="Writing" description="Personal essays, reading notes, and reflections, alongside my notes on engineering and the things I am learning.">
+ <header class="page-header"><p class="eyebrow">Writing & reflections</p><h1>Ideas I am working through.</h1><p class="lede">{site.personalWriting.intro}</p><nav class="writing-nav" aria-label="Writing sections"><a href="#personal-writing">Personal writing <span aria-hidden="true">↘</span></a><a href="#engineering-notes">Engineering notes <span aria-hidden="true">↘</span></a></nav></header>
+ <section class="writing-section" id="personal-writing"><div class="section-head"><h2>{site.personalWriting.title}</h2><span class="meta muted">{personal.length} {personal.length===1?'essay':'essays'}</span></div><p class="writing-topics">{site.personalWriting.topics.join(' / ')}</p>
+ {personal.length?personal.map(article=><WritingRow article={article}/>):<div class="writing-empty"><p>I have not published any personal essays here yet. This is where I will share reflections on what I read, the experiences that shape my interests, and the connections I find between them.</p><Link href="/about/">Read about my background</Link></div>}
+ </section>
+ <section class="writing-section" id="engineering-notes"><div class="section-head"><h2>Engineering notes.</h2><span class="meta muted">{technical.length} {technical.length===1?'note':'notes'}</span></div>
+ {technical.length?technical.map(article=><WritingRow article={article}/>):<div class="writing-empty"><p>As I work through ideas in robotics, hardware, and control, I intend to use this space to explain what I have learned. My project pages describe some of that work in the meantime.</p><Link href="/projects/">Explore my projects</Link></div>}
+ </section>
+</BaseLayout>

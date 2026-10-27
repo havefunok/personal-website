@@ -1,0 +1,107 @@
+{
+  "name": "Oorjith Komarraju",
+  "shortName": "Oorjith",
+  "initials": "OK",
+  "headline": "Electrical engineering and the systems around me.",
+  "description": "I am Oorjith Komarraju, an Electrical Engineering student at UC San Diego with interests in robotics, embedded systems, control, and STEM education.",
+  "email": "oorjith.komarraju@gmail.com",
+  "github": "https://github.com/havefunok",
+  "linkedin": "https://www.linkedin.com/in/okomarraju",
+  "socials": [],
+  "location": "San Diego, California",
+  "education": "Electrical Engineering \u00b7 UC San Diego",
+  "resumePath": "/resume.pdf",
+  "portrait": "",
+  "portraitAlt": "",
+  "siteUrl": "https://havefunok.github.io",
+  "basePath": "/engineering-portfolio",
+  "seoImage": "/social-card.png",
+  "navigation": [
+    {
+      "label": "Home",
+      "path": "/"
+    },
+    {
+      "label": "About",
+      "path": "/about/"
+    },
+    {
+      "label": "Projects",
+      "path": "/projects/"
+    },
+    {
+      "label": "Writing",
+      "path": "/writing/"
+    },
+    {
+      "label": "Resume",
+      "path": "/resume/"
+    },
+    {
+      "label": "Contact",
+      "path": "/contact/"
+    }
+  ],
+  "projectCategories": [
+    "Robotics",
+    "Embedded Systems",
+    "Hardware",
+    "Software",
+    "Research",
+    "Other"
+  ],
+  "hero": {
+    "greeting": "Hello, I am Oorjith.",
+    "intro": "I study Electrical Engineering at UC San Diego. I am interested in robotics, embedded systems, and the connections between hardware and software."
+  },
+  "introduction": "My interest in engineering comes from being able to understand how different parts of a system affect each other. Although a mechanism, a circuit, and a program each have their own requirements, they still have to work together for the overall system to be useful. Competition robotics gave me a way to explore these connections directly. In addition, teaching and leading teams have made me consider how the same work can be explained and understood by other people.",
+  "beyond": {
+    "title": "My interests beyond engineering.",
+    "intro": "Although engineering is a large part of what I spend my time on, I also enjoy teaching, team sports, and reading about history. These interests give me other ways to think about how people learn and work together.",
+    "items": [
+      {
+        "title": "Teaching and access to STEM",
+        "text": "I founded Fremont Robotics Academy to make hands-on STEM education free and accessible. The program has served more than 100 students across 10 schools. Through this work, I have been able to connect my own interest in robotics to opportunities for other students to develop an interest in it themselves.",
+        "link": "/projects/fremont-robotics-academy/",
+        "linkLabel": "Fremont Robotics Academy"
+      },
+      {
+        "title": "Sports, history, and public transit",
+        "text": "Outside of engineering, I enjoy ultimate frisbee, soccer, and cycling. I am also interested in history and public transit because they provide a way to consider how decisions made in the past continue to affect people's lives in the present.",
+        "link": "/about/#beyond-engineering",
+        "linkLabel": "More about me"
+      }
+    ]
+  },
+  "currentFocus": {
+    "label": "What I am currently exploring",
+    "items": [
+      {
+        "title": "Embedded control",
+        "text": "I am exploring how sensors, microcontrollers, and actuators interact, and how feedback can be used to make the behavior of a physical system more predictable."
+      },
+      {
+        "title": "Power distribution",
+        "text": "I am working through how protection and connector choices affect power distribution, particularly when the same hardware needs to be used and maintained by other people."
+      },
+      {
+        "title": "Autonomous robotics",
+        "text": "I am interested in how real-time control can work alongside perception, and how the decisions made at each level affect the robot's overall behavior."
+      }
+    ]
+  },
+  "personalWriting": {
+    "title": "Personal writing.",
+    "intro": "Writing gives me a way to work through an idea and consider why I find it important. I am interested in the connections between what I read, what I experience, and how those things affect my understanding of the world.",
+    "topics": [
+      "Personal essays",
+      "Reading notes",
+      "Reflections"
+    ]
+  },
+  "contact": {
+    "heading": "Getting in touch",
+    "intro": "I am interested in engineering opportunities, research, and projects that connect hardware and software. If your work overlaps with these interests, I would be glad to learn more about it and discuss how I could contribute."
+  },
+  "featuredLimit": 3
+}

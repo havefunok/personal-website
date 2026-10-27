@@ -1,0 +1,16 @@
+---
+import type {CollectionEntry} from 'astro:content';
+import type {MarkdownHeading} from 'astro';
+import BaseLayout from './BaseLayout.astro';
+import Link from '../components/ui/Link.astro';
+import Media from '../components/ui/Media.astro';
+import {displayDate,readingTime} from '../lib/content';
+interface Props {article:CollectionEntry<'writing'>;headings:MarkdownHeading[];}
+const {article,headings}=Astro.props;const d=article.data;
+const toc=headings.filter(h=>h.depth===2);const showToc=toc.length>=4;
+---
+<BaseLayout title={d.title} description={d.description} image={d.coverImage} type="article" published={d.date} updated={d.updated}>
+ <header class="page-header"><Link href="/writing/">All writing</Link><p class="eyebrow mt-8">{d.kind==='personal'?'Personal writing':'Engineering notes'}</p><h1>{d.title}</h1><p class="lede">{d.description}</p><div class="article-meta meta"><span>{displayDate(d.date)}</span><span>{readingTime(article.body)} min read</span>{d.updated&&<span>Updated {displayDate(d.updated)}</span>}</div>{d.tags.length>0&&<ul class="tag-list">{d.tags.map(tag=><li class="tag">{tag}</li>)}</ul>}</header>
+ {d.coverImage&&<div class="detail-cover"><Media src={d.coverImage} alt={d.coverAlt??''} eager/></div>}
+ <div class="article-layout">{showToc?<nav class="toc" aria-label="On this page"><p class="section-kicker">{d.kind==='personal'?'In this essay':'In this note'}</p><ol>{toc.map(h=><li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol></nav>:<aside><p class="section-kicker">{d.kind==='personal'?'Personal writing':'Engineering notes'}</p></aside>}<article class="prose"><slot/></article></div>
+</BaseLayout>
